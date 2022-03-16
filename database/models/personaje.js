@@ -35,5 +35,9 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'Personaje',
   });
+  Personaje.prototype.toJSON = function () {
+    var { createdAt, updatedAt, ...personaje } = Object.assign({}, this.get());
+    return personaje;
+  }
   return Personaje;
 };
