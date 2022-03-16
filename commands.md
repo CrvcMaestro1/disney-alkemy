@@ -25,6 +25,10 @@
 
 - https://anjelicaa.medium.com/deploying-a-node-js-postgres-sequelize-app-to-heroku-da3dc9de07cd
 
+## Queries and Filters
+
+- https://stackoverflow.com/questions/53965349/how-can-i-bind-a-variable-to-sequelize-literal
+
 ## Command run sequelize migration in heroku
 
 - ```heroku run sequelize db:migrate --env production -app alkemy-disney-crvc```
