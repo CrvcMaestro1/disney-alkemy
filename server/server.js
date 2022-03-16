@@ -7,6 +7,7 @@ class Server {
         this.port = process.env.PORT;
         // Paths
         this.authPath = '/v1/auth';
+        this.charactersPath = '/v1/characters';
         // Middlewares
         this.middlewares();
         // Rutas
@@ -22,6 +23,7 @@ class Server {
 
     routes() {
         this.app.use(this.authPath, require('../routes/auth.route'));
+        this.app.use(this.charactersPath, require('../routes/characters.route'));
     }
 
     listener() {
