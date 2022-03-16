@@ -10,5 +10,11 @@ module.exports = {
     url: process.env.HEROKU_POSTGRESQL_RED_URL,
     dialect: 'postgres',
     logging: false,
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
   },
 }
