@@ -53,7 +53,7 @@ const register = async (req = request, res = response) => {
             sendMail(message)
         ])
 
-        res.json({
+        res.status(201).json({
             usuario
         })
     } catch (error) {
