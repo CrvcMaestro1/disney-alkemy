@@ -1,7 +1,6 @@
 const { request, response } = require("express");
 const { Op } = require("sequelize");
 const { Personaje, Pelicula } = require('../database/models');
-const { subqueryPelicula } = require("../helpers");
 
 const charactersGet = async (req = request, res = response) => {
     const { limit = 5, offset = 0, name = null, age = null, weight = null, movies = null } = req.query
@@ -22,10 +21,10 @@ const charactersGet = async (req = request, res = response) => {
             raw: true,
             include: movies ? {
                 model: Pelicula,
-                through: {attributes: []},
-                where: {id : movies},
+                through: { attributes: [] },
+                where: { id: movies },
                 attributes: ['titulo']
-            }: null
+            } : null
         });
 
         res.json({
@@ -54,7 +53,7 @@ const charactersPost = async (req = request, res = response) => {
     }
 }
 
-const characterPut = async (req = request, res = response) => {
+const charactersPut = async (req = request, res = response) => {
     const { id } = req.params;
     const { ...personaje } = req.body
     try {
@@ -75,8 +74,98 @@ const characterPut = async (req = request, res = response) => {
     }
 }
 
+const charactersDelete = async (req = request, res = response) => {
+    const { id } = req.params;
+    try {
+        const character = await Personaje.findOne({ where: { id } })
+        if (character) {
+            await deleted.destroy()
+            return res.json({
+                deleted
+            })
+        }
+        res.status(404).json({
+            message: 'Personaje no existe'
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Ocurrió un error, hable con el administrador'
+        })
+    }
+}
+
+const charactersGetOne = async (req = request, res = response) => {
+    const { id } = req.params
+    try {
+        const character = await Personaje.findOne({
+            where: { id },
+            attributes: ['id', 'nombre', 'imagen', 'edad', 'peso', 'historia',],
+            include: [
+                {
+                    model: Pelicula,
+                    through: { attributes: [] },
+                    attributes: ['titulo']
+                }
+            ]
+        })
+        if (character) {
+            return res.json({
+                character
+            })
+        }
+        res.status(404).json({
+            message: 'Personaje no existe'
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Ocurrió un error, hable con el administrador'
+        })
+    }
+}
+
+const charactersAddMovie = async (req = request, res = response) => {
+    const { id } = req.params
+    const { movie } = req.body
+    try {
+        const character = await Personaje.findOne({ where: { id } })
+        const movieToAdd = await Pelicula.findOne({ where: { id: movie } })
+        if (!character) {
+            res.status(404).json({
+                message: 'Personaje no existe'
+            })
+        }
+        if (!movieToAdd) {
+            res.status(404).json({
+                message: 'Personaje o serie no existe'
+            })
+        }
+        character.addPelicula(movieToAdd)
+        const resultCharacter = await Personaje.findOne({
+            where: { id },
+            attributes: ['id', 'nombre', 'imagen', 'edad', 'peso', 'historia',],
+            include: [
+                {
+                    model: Pelicula,
+                    through: { attributes: [] },
+                    attributes: ['titulo']
+                }
+            ]
+        })
+        return res.json({
+            character: resultCharacter
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Ocurrió un error, hable con el administrador'
+        })
+    }
+}
+
 module.exports = {
     charactersGet,
     charactersPost,
-    characterPut
+    charactersPut,
+    charactersDelete,
+    charactersGetOne,
+    charactersAddMovie
 }

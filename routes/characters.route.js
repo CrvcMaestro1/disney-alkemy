@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { charactersPost, charactersGet, characterPut } = require('../controllers/characters.controller');
+const { charactersPost, charactersGet, charactersPut, charactersDelete, charactersGetOne, charactersAddMovie } = require('../controllers/characters.controller');
 const { validarCampos, validarJWT } = require('../middlewares');
 
 const router = Router();
@@ -20,8 +20,28 @@ router.post('/', [
 ], charactersPost);
 
 router.put('/:id', [
+    validarJWT,
     check('id', 'No es un ID válido').isInt(),
     validarCampos
-], characterPut);
+], charactersPut);
+
+router.delete('/:id', [
+    validarJWT,
+    check('id', 'No es un ID válido').isInt(),
+    validarCampos
+], charactersDelete);
+
+router.get('/:id', [
+    validarJWT,
+    check('id', 'No es un ID válido').isInt(),
+    validarCampos
+], charactersGetOne)
+
+router.post('/:id/movies', [
+    validarJWT,
+    check('id', 'No es un ID válido').isInt(),
+    check('movie', 'El ID de película es obligatorio').isInt(),
+    validarCampos
+], charactersAddMovie);
 
 module.exports = router;
