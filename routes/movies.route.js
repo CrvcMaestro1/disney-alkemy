@@ -15,11 +15,9 @@ router.get('/', [
 router.post('/', [
     validarJWT,
     check('titulo').custom(tituloExiste),
-    check('generoId').custom(validarGenero),
     check('imagen', 'La imagen es obligatoria').not().isEmpty(),
     check('titulo', 'El titulo es obligatorio').not().isEmpty(),
     check('calificacion', 'La calificación debe ser del 1 al 5').isIn([1, 2, 3, 4, 5]),
-    check('generoId', 'No es un ID válido').isInt(),
     validarCampos
 ], moviesPost);
 
