@@ -9,6 +9,7 @@ class Server {
         this.authPath = '/v1/auth';
         this.genresPath = '/v1/genres';
         this.charactersPath = '/v1/characters';
+        this.moviesPath = '/v1/movies';
         // Middlewares
         this.middlewares();
         // Rutas
@@ -26,6 +27,7 @@ class Server {
         this.app.use(this.authPath, require('../routes/auth.route'));
         this.app.use(this.genresPath, require('../routes/genres.route'));
         this.app.use(this.charactersPath, require('../routes/characters.route'));
+        this.app.use(this.moviesPath, require('../routes/movies.route'));
     }
 
     listener() {

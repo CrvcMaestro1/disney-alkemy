@@ -23,8 +23,9 @@ const Usuario = UsuarioModel(sequelize, DataTypes);
 
 Personaje.belongsToMany(Pelicula, { through: 'Personaje_Pelicula' });
 Pelicula.belongsToMany(Personaje, { through: 'Personaje_Pelicula' });
-Genero.hasMany(Pelicula);
-Pelicula.belongsTo(Genero);
+
+Genero.belongsToMany(Pelicula, { through: 'Genero_Pelicula' });
+Pelicula.belongsToMany(Genero, { through: 'Genero_Pelicula' });
 
 sequelize.sync();
 
@@ -33,13 +34,19 @@ Usuario.addHook('beforeSave', async (user) => {
 });
 
 Usuario.prototype.toJSON = function () {
-  var { password, createdAt, updatedAt, ...usuario } = Object.assign({}, this.get());
+  const { password, createdAt, updatedAt, ...usuario } = Object.assign({}, this.get());
   return usuario;
 }
 
 Personaje.prototype.toJSON = function () {
-  var { createdAt, updatedAt, ...personaje } = Object.assign({}, this.get());
+  const { createdAt, updatedAt, ...personaje } = Object.assign({}, this.get());
   return personaje;
 }
+
+Pelicula.prototype.toJSON = function () {
+  const { createdAt, updatedAt, GeneroId, ...pelicula } = Object.assign({}, this.get());
+  return pelicula;
+}
+
 
 module.exports = { sequelize, Personaje, Pelicula, Genero, Usuario };

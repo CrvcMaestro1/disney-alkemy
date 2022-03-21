@@ -1,4 +1,4 @@
-const { Usuario, Genero } = require('../database/models');
+const { Usuario, Genero, Pelicula } = require('../database/models');
 
 const emailExiste = async (email = '') => {
     const existeEmail = await Usuario.findOne({
@@ -18,7 +18,25 @@ const generoExiste = async (nombre = '') => {
     }
 }
 
+const validarGenero = async (generoId = 0) => {
+    const genero = await Genero.findOne({ where: { id: generoId } })
+    if (!genero) {
+        throw new Error('El genero no existe')
+    }
+}
+
+const tituloExiste = async (titulo = '') => {
+    const pelicula = await Pelicula.findOne({
+        where: { titulo }
+    })
+    if (pelicula) {
+        throw new Error('El titulo ya está registrado')
+    }
+}
+
 module.exports = {
     emailExiste,
-    generoExiste
+    generoExiste,
+    validarGenero,
+    tituloExiste
 }

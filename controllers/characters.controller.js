@@ -79,9 +79,9 @@ const charactersDelete = async (req = request, res = response) => {
     try {
         const character = await Personaje.findOne({ where: { id } })
         if (character) {
-            await deleted.destroy()
+            await character.destroy()
             return res.json({
-                deleted
+                character
             })
         }
         res.status(404).json({
