@@ -1,37 +1,25 @@
-const { v4: uuidv4 } = require('uuid');
-'use strict';
-const {
-  Model
-} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Usuario extends Model {
-    static associate(models) {
-      // define association here
-    }
-  };
-  Usuario.init({
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false
+  return sequelize.define('Usuario', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
     },
     email: {
       type: DataTypes.STRING,
-      allowNull: false
+      allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true,
+        notEmpty: true,
+      },
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: false
-    }
-  }, {
-    sequelize,
-    modelName: 'Usuario',
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
   });
-  Usuario.addHook('beforeSave', async (user) => {
-    return user.id = uuidv4();
-  });
-  Usuario.prototype.toJSON = function () {
-    var { password, createdAt, updatedAt, ...usuario } = Object.assign({}, this.get());
-    return usuario;
-  }
-  return Usuario;
 };

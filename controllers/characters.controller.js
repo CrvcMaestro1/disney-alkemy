@@ -1,7 +1,7 @@
 const { request, response } = require("express");
 const { Op } = require("sequelize");
-const { Personaje } = require('../database/models');
-const { subqueryPeliculaSerie } = require("../helpers");
+const { Personaje, Pelicula } = require('../database/models');
+const { subqueryPelicula } = require("../helpers");
 
 const charactersGet = async (req = request, res = response) => {
     const { limit = 5, offset = 0, name = null, age = null, weight = null, movies = null } = req.query
@@ -10,7 +10,6 @@ const charactersGet = async (req = request, res = response) => {
         name ? listQueries.push({ nombre: { [Op.like]: `%${name}%` } }) : null
         age ? listQueries.push({ edad: age }) : null
         weight ? listQueries.push({ peso: weight }) : null
-        movies ? listQueries.push(subqueryPeliculaSerie(movies)) : null
         let where = listQueries.length > 0 ? {
             [Op.or]: listQueries
         } : {}
@@ -20,7 +19,13 @@ const charactersGet = async (req = request, res = response) => {
             where,
             offset,
             limit,
-            raw: true
+            raw: true,
+            include: movies ? {
+                model: Pelicula,
+                through: {attributes: []},
+                where: {id : movies},
+                attributes: ['titulo']
+            }: null
         });
 
         res.json({
@@ -28,7 +33,6 @@ const charactersGet = async (req = request, res = response) => {
             count
         })
     } catch (error) {
-        console.log(error)
         return res.status(500).json({
             message: 'Ocurrió un error, hable con el administrador'
         })

@@ -1,0 +1,218 @@
+{
+    "tables": {
+        "Personajes": {
+            "tableName": "Personajes",
+            "schema": {
+                "id": {
+                    "autoIncrement": true,
+                    "primaryKey": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "nombre": {
+                    "allowNull": false,
+                    "validate": {
+                        "notEmpty": true
+                    },
+                    "field": "nombre",
+                    "seqType": "Sequelize.STRING"
+                },
+                "imagen": {
+                    "allowNull": false,
+                    "validate": {
+                        "notEmpty": true
+                    },
+                    "field": "imagen",
+                    "seqType": "Sequelize.STRING"
+                },
+                "edad": {
+                    "allowNull": false,
+                    "validate": {
+                        "min": 1,
+                        "isInt": true
+                    },
+                    "field": "edad",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "peso": {
+                    "allowNull": false,
+                    "field": "peso",
+                    "seqType": "Sequelize.DECIMAL(10, 2)"
+                },
+                "historia": {
+                    "allowNull": false,
+                    "validate": {
+                        "notEmpty": true
+                    },
+                    "field": "historia",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "Peliculas": {
+            "tableName": "Peliculas",
+            "schema": {
+                "id": {
+                    "autoIncrement": true,
+                    "primaryKey": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "titulo": {
+                    "allowNull": false,
+                    "unique": true,
+                    "validate": {
+                        "notEmpty": true
+                    },
+                    "field": "titulo",
+                    "seqType": "Sequelize.STRING"
+                },
+                "imagen": {
+                    "allowNull": false,
+                    "validate": {
+                        "notEmpty": true
+                    },
+                    "field": "imagen",
+                    "seqType": "Sequelize.STRING"
+                },
+                "fechaCreacion": {
+                    "allowNull": false,
+                    "validate": {
+                        "isDate": true
+                    },
+                    "field": "fechaCreacion",
+                    "seqType": "Sequelize.DATEONLY"
+                },
+                "calificacion": {
+                    "allowNull": false,
+                    "validate": {
+                        "min": 1,
+                        "max": 5
+                    },
+                    "field": "calificacion",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "generoId": {
+                    "field": "generoId",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "GeneroId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "Generos",
+                        "key": "id"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "field": "GeneroId",
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
+        "Generos": {
+            "tableName": "Generos",
+            "schema": {
+                "id": {
+                    "autoIncrement": true,
+                    "primaryKey": true,
+                    "field": "id",
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "nombre": {
+                    "allowNull": false,
+                    "unique": true,
+                    "validate": {
+                        "notEmpty": true
+                    },
+                    "field": "nombre",
+                    "seqType": "Sequelize.STRING"
+                },
+                "imagen": {
+                    "allowNull": false,
+                    "validate": {
+                        "notEmpty": true
+                    },
+                    "field": "imagen",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "Usuarios": {
+            "tableName": "Usuarios",
+            "schema": {
+                "id": {
+                    "defaultValue": {
+                        "internal": true,
+                        "value": "Sequelize.UUIDV4"
+                    },
+                    "primaryKey": true,
+                    "field": "id",
+                    "seqType": "Sequelize.UUID"
+                },
+                "email": {
+                    "allowNull": false,
+                    "unique": true,
+                    "validate": {
+                        "isEmail": true,
+                        "notEmpty": true
+                    },
+                    "field": "email",
+                    "seqType": "Sequelize.STRING"
+                },
+                "password": {
+                    "allowNull": false,
+                    "validate": {
+                        "notEmpty": true
+                    },
+                    "field": "password",
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "field": "createdAt",
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "field": "updatedAt",
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        }
+    },
+    "revision": 1
+}

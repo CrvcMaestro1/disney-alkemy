@@ -1,12 +1,13 @@
-'use strict';
+const { Sequelize, DataTypes } = require('sequelize');
+const { v4: uuidv4 } = require('uuid');
 
-const fs = require('fs');
-const path = require('path');
-const Sequelize = require('sequelize');
-const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.js')[env];
-const db = {};
+
+const PersonajeModel = require('./personaje');
+const PeliculaModel = require('./pelicula');
+const GeneroModel = require('./genero');
+const UsuarioModel = require('./usuario');
 
 let sequelize;
 if (config.url) {
@@ -15,23 +16,30 @@ if (config.url) {
   sequelize = new Sequelize(config.database, config.username, config.password, config);
 }
 
-fs
-  .readdirSync(__dirname)
-  .filter(file => {
-    return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
-  })
-  .forEach(file => {
-    const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
-    db[model.name] = model;
-  });
+const Personaje = PersonajeModel(sequelize, DataTypes);
+const Pelicula = PeliculaModel(sequelize, DataTypes);
+const Genero = GeneroModel(sequelize, DataTypes);
+const Usuario = UsuarioModel(sequelize, DataTypes);
 
-Object.keys(db).forEach(modelName => {
-  if (db[modelName].associate) {
-    db[modelName].associate(db);
-  }
+Personaje.belongsToMany(Pelicula, { through: 'Personaje_Pelicula' });
+Pelicula.belongsToMany(Personaje, { through: 'Personaje_Pelicula' });
+Genero.hasMany(Pelicula);
+Pelicula.belongsTo(Genero);
+
+sequelize.sync();
+
+Usuario.addHook('beforeSave', async (user) => {
+  return user.id = uuidv4();
 });
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+Usuario.prototype.toJSON = function () {
+  var { password, createdAt, updatedAt, ...usuario } = Object.assign({}, this.get());
+  return usuario;
+}
 
-module.exports = db;
+Personaje.prototype.toJSON = function () {
+  var { createdAt, updatedAt, ...personaje } = Object.assign({}, this.get());
+  return personaje;
+}
+
+module.exports = { sequelize, Personaje, Pelicula, Genero, Usuario };

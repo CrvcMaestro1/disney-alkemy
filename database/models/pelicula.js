@@ -1,13 +1,14 @@
 module.exports = (sequelize, DataTypes) => {
-  return sequelize.define('Personaje', {
+  return sequelize.define('Pelicula', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    nombre: {
+    titulo: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
       validate: {
         notEmpty: true,
       },
@@ -19,24 +20,21 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty: true,
       },
     },
-    edad: {
+    fechaCreacion: {
+      type: DataTypes.DATEONLY,
+      allowNull: false,
+      validate: {
+        isDate: true,
+      },
+    },
+    calificacion: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         min: 1,
-        isInt: true,
-      },
+        max: 5
+      }
     },
-    peso: {
-      type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
-    },
-    historia: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
+    generoId: DataTypes.INTEGER,
   });
 };

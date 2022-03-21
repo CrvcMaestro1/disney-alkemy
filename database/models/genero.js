@@ -1,30 +1,24 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Genero extends Model {
-    static associate(models) {
-      // define association here
-      this.belongsToMany(models.PeliculaSerie, {
-        foreignKey: 'generoId',
-        through: 'Genero_PeliculaSerie',
-        as: 'peliculasoseries'
-      });
-    }
-  };
-  Genero.init({
-    imagen: {
-      type: DataTypes.STRING,
-      allowNull: true
+  return sequelize.define('Genero', {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
     },
     nombre: {
       type: DataTypes.STRING,
-      allowNull: false
-    }
-  }, {
-    sequelize,
-    modelName: 'Genero',
+      allowNull: false,
+      unique: true,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    imagen: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
   });
-  return Genero;
 };
