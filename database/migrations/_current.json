@@ -103,10 +103,6 @@
                     "field": "calificacion",
                     "seqType": "Sequelize.INTEGER"
                 },
-                "generoId": {
-                    "field": "generoId",
-                    "seqType": "Sequelize.INTEGER"
-                },
                 "createdAt": {
                     "allowNull": false,
                     "field": "createdAt",
@@ -116,17 +112,6 @@
                     "allowNull": false,
                     "field": "updatedAt",
                     "seqType": "Sequelize.DATE"
-                },
-                "GeneroId": {
-                    "allowNull": true,
-                    "references": {
-                        "model": "Generos",
-                        "key": "id"
-                    },
-                    "onDelete": "SET NULL",
-                    "onUpdate": "CASCADE",
-                    "field": "GeneroId",
-                    "seqType": "Sequelize.INTEGER"
                 }
             },
             "indexes": []
