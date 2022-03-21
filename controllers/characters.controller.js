@@ -136,7 +136,7 @@ const charactersAddMovie = async (req = request, res = response) => {
         }
         if (!movieToAdd) {
             res.status(404).json({
-                message: 'Personaje o serie no existe'
+                message: 'Pelicula o serie no existe'
             })
         }
         character.addPelicula(movieToAdd)
