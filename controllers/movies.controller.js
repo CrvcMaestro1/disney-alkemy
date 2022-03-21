@@ -7,7 +7,6 @@ const moviesGet = async (req = request, res = response) => {
     try {
         const listQueries = []
         name ? listQueries.push({ titulo: { [Op.like]: `%${name}%` } }) : null
-        genre ? listQueries.push({ generoId: genre }) : null
         let where = listQueries.length > 0 ? {
             [Op.or]: listQueries
         } : {}
@@ -18,7 +17,13 @@ const moviesGet = async (req = request, res = response) => {
             offset,
             limit,
             raw: true,
-            order: order ? [['titulo', order]] : null
+            order: order ? [['titulo', order]] : null,
+            include: genre ? {
+                model: Genero,
+                through: { attributes: [] },
+                where: { id: genre },
+                attributes: ['nombre']
+            } : null
         });
 
         res.json({
