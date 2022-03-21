@@ -1,6 +1,6 @@
 const { request, response } = require("express");
 const { Op } = require("sequelize");
-const { Genero } = require('../database/models');
+const { Genero, Pelicula } = require('../database/models');
 
 const genresGet = async (req = request, res = response) => {
     const { limit = 5, offset = 0, name = null } = req.query
@@ -92,7 +92,14 @@ const genresGetOne = async (req = request, res = response) => {
     try {
         const genre = await Genero.findOne({
             where: { id },
-            attributes: ['id', 'nombre', 'imagen']
+            attributes: ['id', 'nombre', 'imagen'],
+            include: [
+                {
+                    model: Pelicula,
+                    through: { attributes: [] },
+                    attributes: ['titulo'],
+                }
+            ]
         })
         if (genre) {
             return res.json({
