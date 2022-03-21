@@ -1,4 +1,4 @@
-const { Usuario } = require('../database/models');
+const { Usuario, Genero } = require('../database/models');
 
 const emailExiste = async (email = '') => {
     const existeEmail = await Usuario.findOne({
@@ -9,6 +9,16 @@ const emailExiste = async (email = '') => {
     }
 }
 
+const generoExiste = async (nombre = '') => {
+    const genero = await Genero.findOne({
+        where: { nombre }
+    })
+    if (genero) {
+        throw new Error('El género ya está registrado')
+    }
+}
+
 module.exports = {
-    emailExiste
+    emailExiste,
+    generoExiste
 }
